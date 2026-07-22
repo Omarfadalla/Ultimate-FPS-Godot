@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbvvghgyf32by" path="res://controllers/scripts/fps_controller.gd" id="1_pgc1p"]
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://materials/player.tres" id="2_gldw4"]
+[ext_resource type="Script" uid="uid://buhmo144rwubi" path="res://controllers/scripts/reticle.gd" id="3_xc2pf"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6tj1"]
 
@@ -96,6 +97,7 @@ _data = {
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1328381524 node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATIONPLAYER", "CROUCH_SHAPECAST")]
 script = ExtResource("1_pgc1p")
+TOGGLE_CROUCH = false
 MOUSE_SENSITIVITY = 0.25
 CAMERA_CONTROLLER = NodePath("CameraController/Camera3D")
 ANIMATIONPLAYER = NodePath("AnimationPlayer")
@@ -124,5 +126,45 @@ libraries/ = SubResource("AnimationLibrary_t6fw5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("SphereShape3D_ca8e7")
 debug_shape_custom_color = Color(0, 0.8131165, 0, 1)
+
+[node name="UserInterface" type="Control" parent="." unique_id=1849128852]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle" type="CenterContainer" parent="UserInterface" unique_id=1716096924]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_xc2pf")
+
+[node name="Top" type="Line2D" parent="UserInterface/Reticle" unique_id=357090056]
+points = PackedVector2Array(0, -5, 0, -15)
+width = 2.0
+
+[node name="Right" type="Line2D" parent="UserInterface/Reticle" unique_id=1890694877]
+points = PackedVector2Array(5, 0, 15, 0)
+width = 2.0
+
+[node name="Bottom" type="Line2D" parent="UserInterface/Reticle" unique_id=338394]
+points = PackedVector2Array(0, 5, 0, 15)
+width = 2.0
+
+[node name="Left" type="Line2D" parent="UserInterface/Reticle" unique_id=1382854018]
+points = PackedVector2Array(-5, 0, -15, 0)
+width = 2.0
 
 [connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]
