@@ -19,6 +19,10 @@ run/main_scene="res://levels/level_001.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+global="*uid://cuy8gcm4j6ebx"
+
 [display]
 
 window/size/always_on_top=true
