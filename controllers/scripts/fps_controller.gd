@@ -65,7 +65,7 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 	
 func _ready():
-
+	global.player = self
 	# Get mouse input
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
