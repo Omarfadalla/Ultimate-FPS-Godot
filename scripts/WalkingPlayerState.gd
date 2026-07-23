@@ -6,6 +6,7 @@ extends State
 
 func enter() -> void:
 	ANIMATION.play("Walking",-1.0,1.0)
+	global.player._speed = global.player.SPEED_DEFAULT
 
 func update(delta: float) -> void:
 	set_animation_speed(global.player.velocity.length())
@@ -15,3 +16,7 @@ func update(delta: float) -> void:
 func set_animation_speed(spd):
 	var alpha = remap(spd,0.0,global.player.SPEED_DEFAULT,0.0,1.0)
 	ANIMATION.speed_scale = lerp(0.0,TOP_ANIM_SPEED,alpha)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("sprint") and global.player.is_on_floor:
+		transition.emit("SprintingPlayerState")
