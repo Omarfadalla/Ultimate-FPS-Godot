@@ -128,6 +128,7 @@ tracks/5/keys = {
 [sub_resource type="Animation" id="Animation_jmoha"]
 resource_name = "Walking"
 length = 2.0
+loop_mode = 1
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -136,7 +137,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(2, 2, 2, 2, 2),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0, 0),
+"points": PackedFloat32Array(0.015, 0, 0, 0.083333336, -0.0025, 0, -0.083333336, 0.004166667, 0.083333336, -0.004166667, -0.025, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, -0.0058333334, 0.083333336, 0.0058333334, 0.025, -0.083333336, -0.004166667, 0, 0),
 "times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
 }
 tracks/1/type = "bezier"
@@ -146,9 +147,9 @@ tracks/1/path = NodePath("CameraController:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 2, 2, 2, 2, 2),
-"points": PackedFloat32Array(-0.042154543, -0.061111115, 0, 0.02222222, 0, 1.5, -0.083333336, 0, 0.083333336, 0, -0.069345385, -0.00016666453, 0, 0.083166674, 0, 1.5, -0.083333336, 0, 0.083333336, 0, 1.5, -0.083333336, 0, 0.083333336, 0, 1.5, -0.083333336, 0, 0, 0),
-"times": PackedFloat32Array(0, 0.5, 0.501, 1, 1.5, 2)
+"handle_modes": PackedInt32Array(2, 2, 2, 2, 2),
+"points": PackedFloat32Array(1.5, 0, 0, 0.083333336, 0.008333325, 1.65, -0.083333336, 0, 0.083333336, 0, 1.5, -0.083333336, 0, 0.083333336, 0, 1.65, -0.083333336, 0, 0.083333336, 0, 1.5, -0.083333336, 0.024999997, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
 }
 tracks/2/type = "bezier"
 tracks/2/imported = false
@@ -157,9 +158,9 @@ tracks/2/path = NodePath("CameraController:position:z")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(2, 2, 2, 2, 2, 2),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0, 0, -0.102578625, -0.00016665459, 0.017851738, 0, 0),
-"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2, 2.001)
+"handle_modes": PackedInt32Array(2, 2, 2, 2, 2),
+"points": PackedFloat32Array(0, 0, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0.083333336, 0, 0, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t6fw5"]
@@ -272,10 +273,12 @@ theme = ExtResource("4_t6fw5")
 script = ExtResource("6_gshig")
 CURRENT_STATE = NodePath("IdlePlayerState")
 
-[node name="IdlePlayerState" type="Node" parent="PlayerStateMachine" unique_id=1450103426]
+[node name="IdlePlayerState" type="Node" parent="PlayerStateMachine" unique_id=1450103426 node_paths=PackedStringArray("ANIMATION")]
 script = ExtResource("7_jmoha")
+ANIMATION = NodePath("../../AnimationPlayer")
 
-[node name="WalkingPlayerState" type="Node" parent="PlayerStateMachine" unique_id=183773817]
+[node name="WalkingPlayerState" type="Node" parent="PlayerStateMachine" unique_id=183773817 node_paths=PackedStringArray("ANIMATION")]
 script = ExtResource("8_jmoha")
+ANIMATION = NodePath("../../AnimationPlayer")
 
 [connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]

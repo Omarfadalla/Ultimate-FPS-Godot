@@ -98,6 +98,8 @@ data = PackedVector3Array(-1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -
 material = SubResource("ShaderMaterial_0racc")
 size = Vector3(6, 0.5, 4)
 
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_u3xe6"]
+
 [node name="Node3D" type="Node3D" unique_id=1107541480]
 
 [node name="WorldEnvironment" parent="." unique_id=1790114016 instance=ExtResource("1_u3xe6")]
@@ -118,6 +120,7 @@ mesh = SubResource("BoxMesh_xc4gq")
 [node name="StaticBody3D" type="StaticBody3D" parent="HighPlatform" unique_id=170199359]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HighPlatform/StaticBody3D" unique_id=1786229334]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3913071, 0.97976494, -1.9372306)
 shape = SubResource("ConcavePolygonShape3D_vp4dy")
 
 [node name="LowPlatform" type="MeshInstance3D" parent="." unique_id=2108514438]
@@ -126,7 +129,8 @@ mesh = SubResource("BoxMesh_u3xe6")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="LowPlatform" unique_id=2113511329]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LowPlatform/StaticBody3D" unique_id=1533235152]
-shape = SubResource("ConcavePolygonShape3D_vp4dy")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LowPlatform/StaticBody3D" unique_id=853347958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.62, 0.5, 2)
+shape = SubResource("ConcavePolygonShape3D_u3xe6")
 
 [node name="CharacterBody3D" parent="." unique_id=1939147397 instance=ExtResource("4_ou8u5")]
