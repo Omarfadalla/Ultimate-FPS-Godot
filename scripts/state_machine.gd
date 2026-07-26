@@ -3,7 +3,6 @@ class_name StateMachine
 extends Node
 
 @export var CURRENT_STATE: State
-
 var states: Dictionary = {}
 
 func _ready() -> void:
@@ -13,7 +12,8 @@ func _ready() -> void:
 			child.transition.connect(on_child_transition)
 		else:
 			push_warning("State Machine contains incompatible child node")
-		
+			
+	await owner.ready
 	CURRENT_STATE.enter()
 
 func _process(delta: float) -> void:
