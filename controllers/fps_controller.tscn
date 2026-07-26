@@ -276,7 +276,6 @@ libraries/ = SubResource("AnimationLibrary_t6fw5")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("SphereShape3D_ca8e7")
-debug_shape_custom_color = Color(0, 0.8131165, 0, 1)
 
 [node name="UserInterface" type="Control" parent="." unique_id=1849128852]
 layout_mode = 3

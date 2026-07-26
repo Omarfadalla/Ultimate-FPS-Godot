@@ -9,6 +9,9 @@ extends PlayerMovementState
 func enter() -> void:
 	ANIMATION.play("Walking",-1.0,1.0)
 
+func exit() -> void:
+	ANIMATION.speed_scale = 1.0
+
 func update(delta: float) -> void:
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED,ACCELERATION,DECELERATION)
@@ -25,3 +28,6 @@ func set_animation_speed(spd):
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("sprint") and PLAYER.is_on_floor:
 		transition.emit("SprintingPlayerState")
+	
+	if event.is_action_pressed("crouch"):
+		transition.emit("CrouchingPlayerState")
