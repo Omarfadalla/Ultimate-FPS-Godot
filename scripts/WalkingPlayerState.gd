@@ -30,7 +30,9 @@ func update(delta: float) -> void:
 
 	if PLAYER.velocity.length() == 0:
 		transition.emit("IdlePlayerState")
-		return
+
+	if Input.is_action_just_pressed("jump") and PLAYER.is_on_floor():
+			transition.emit("JumpingPlayerState")
 
 func set_animation_speed(spd):
 	var alpha = remap(spd, 0.0, PLAYER.SPEED_DEFAULT, 0.0, 1.0)

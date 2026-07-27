@@ -18,6 +18,7 @@ func enter(previous_state) -> void:
 func update(delta: float) -> void:
 	PLAYER.update_gravity(delta)
 	PLAYER.update_velocity()
+	
 
 func set_tilt(player_rotation):
 	var tilt = Vector3.ZERO

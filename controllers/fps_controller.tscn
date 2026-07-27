@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://saiuiv77oppo" path="res://scripts/SprintingPlayerState.gd" id="9_bneyr"]
 [ext_resource type="Script" uid="uid://y6j87ggdwtr8" path="res://controllers/CrouchingPlayerState.gd" id="10_jdr2h"]
 [ext_resource type="Script" uid="uid://ds4pw6gaqs2ar" path="res://controllers/SlidingPlayerState.gd" id="11_rk4xh"]
+[ext_resource type="Script" uid="uid://2psb65xd7jcc" path="res://controllers/JumpingPlayerState.gd" id="12_uovkr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6tj1"]
 
@@ -516,5 +517,9 @@ metadata/_custom_type_script = "uid://y76llasyo47h"
 script = ExtResource("11_rk4xh")
 SPEED = 4.0
 metadata/_custom_type_script = "uid://y76llasyo47h"
+
+[node name="JumpingPlayerState" type="Node" parent="PlayerStateMachine" unique_id=1110532559]
+script = ExtResource("12_uovkr")
+metadata/_custom_type_script = "uid://cyiyst2ay6kpt"
 
 [connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]
