@@ -57,6 +57,59 @@ tracks/2/keys = {
 "values": [Vector3(0, 1.5, 0), Vector3(0, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_uovkr"]
+resource_name = "JumpEnd"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraController:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(2, 0, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -0.024, -0.005555556, 0, 0, 0, 0, -0.052500002, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.085, 0.4)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraController:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.085, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0), Vector3(0, 1.45, 0), Vector3(0, 1.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_l8yvu"]
+resource_name = "JumpStart"
+length = 0.55
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraController:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(2, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -0.015, -0.03888889, 0, 0, 0, 0, -0.055555563, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.2, 0.55)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraController:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0), Vector3(0, 1.45, 0), Vector3(0, 1.5, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_xc2pf"]
 length = 0.001
 tracks/0/type = "value"
@@ -208,6 +261,17 @@ tracks/12/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [75.0]
+}
+tracks/13/type = "bezier"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("CameraController:rotation:x")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="Animation" id="Animation_rk4xh"]
@@ -391,6 +455,8 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t6fw5"]
 _data = {
 &"Crouching": SubResource("Animation_ca8e7"),
+&"JumpEnd": SubResource("Animation_uovkr"),
+&"JumpStart": SubResource("Animation_l8yvu"),
 &"RESET": SubResource("Animation_xc2pf"),
 &"Sliding": SubResource("Animation_rk4xh"),
 &"Sprinting": SubResource("Animation_bneyr"),
@@ -424,6 +490,7 @@ enable_shadows = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1536981195]
 libraries/ = SubResource("AnimationLibrary_t6fw5")
+blend_times = [&"JumpEnd", &"JumpEnd", 0.1, &"JumpEnd", &"Walking", 0.5]
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1160224815]
 unique_name_in_owner = true
@@ -456,7 +523,6 @@ script = ExtResource("3_xc2pf")
 RETICLE_LINES = [NodePath("Top"), NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
 PLAYER_CONTROLLER = NodePath("../..")
 RETICLE_SPEED = 0.1
-RETICLE_DISTANCE = 4.0
 
 [node name="Top" type="Line2D" parent="UserInterface/Reticle" unique_id=357090056]
 points = PackedVector2Array(0, -5, 0, -15)
