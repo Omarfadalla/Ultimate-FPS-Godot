@@ -31,6 +31,9 @@ func update(delta: float) -> void:
 	if Input.is_action_just_pressed("jump") and PLAYER.is_on_floor():
 			transition.emit("JumpingPlayerState")
 
+	if PLAYER.velocity.y < -3.0 and !PLAYER.is_on_floor():
+		transition.emit("FallingPlayerState")
+
 func set_animation_speed(spd) -> void:
 	var alpha = clamp(remap(spd,0.0,SPEED,0.0,1.0), 0.0, 1.0)
 	ANIMATION.speed_scale = lerp(0.0,TOP_ANIM_SPEED,alpha)
