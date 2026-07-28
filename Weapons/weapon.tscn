@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b2d4bgqwgu8rk"]
+
+[ext_resource type="ArrayMesh" uid="uid://buakwwpgk0ski" path="res://meshes/weapons/cowbar/mesh_crowbar.res" id="1_0jw1c"]
+[ext_resource type="Material" uid="uid://x1osmjppm3px" path="res://textures/crowbar_shader.tres" id="2_2ue5o"]
+
+[node name="Weapon" type="Node3D" unique_id=866504628]
+
+[node name="WeaponMesh" type="MeshInstance3D" parent="." unique_id=1965102347]
+layers = 2
+cast_shadow = 0
+mesh = ExtResource("1_0jw1c")
+surface_material_override/0 = ExtResource("2_2ue5o")
+
+[node name="WeaponShadow" type="MeshInstance3D" parent="." unique_id=1873110256]
+cast_shadow = 3
+mesh = ExtResource("1_0jw1c")
