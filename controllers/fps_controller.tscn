@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbvvghgyf32by" path="res://controllers/scripts/fps_controller.gd" id="1_pgc1p"]
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://materials/player.tres" id="2_gldw4"]
+[ext_resource type="PackedScene" uid="uid://b2d4bgqwgu8rk" path="res://Weapons/weapon.tscn" id="3_3og01"]
 [ext_resource type="PackedScene" uid="uid://bcewdcj3eblvi" path="res://meshes/weapons/cowbar/crowbar.glb" id="3_5w0k0"]
 [ext_resource type="Script" uid="uid://buhmo144rwubi" path="res://scripts/reticle.gd" id="3_xc2pf"]
 [ext_resource type="Theme" uid="uid://jgwk3mj0x7cs" path="res://ui/themes/debug.tres" id="4_t6fw5"]
@@ -492,8 +493,12 @@ enable_shadows = true
 
 [node name="WeaponRig" type="Node3D" parent="CameraController/Camera3D" unique_id=1949591967]
 
+[node name="Weapon" parent="CameraController/Camera3D/WeaponRig" unique_id=1289241358 instance=ExtResource("3_3og01")]
+transform = Transform3D(-1.8804704, 0.6790896, 0.05166619, 0.13622871, 0.22640234, 1.9824688, 0.6672883, 1.8675063, -0.25912744, 0.36042246, -0.31500006, -0.2845577)
+
 [node name="crowbar" parent="CameraController/Camera3D/WeaponRig" unique_id=1223158915 instance=ExtResource("3_5w0k0")]
 transform = Transform3D(-0.9924585, 0.10093929, 0.06955088, 0.09556327, 0.9924625, -0.07671903, -0.07677061, -0.06949395, -0.99462396, 0.215, -0.315, -0.33)
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1536981195]
 libraries/ = SubResource("AnimationLibrary_t6fw5")
