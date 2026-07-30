@@ -469,12 +469,13 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ca8e7"]
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1328381524 node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATIONPLAYER", "CROUCH_SHAPECAST")]
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1328381524 node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATIONPLAYER", "CROUCH_SHAPECAST", "WEAPON_CONTROLLER")]
 script = ExtResource("1_pgc1p")
 MOUSE_SENSITIVITY = 0.25
 CAMERA_CONTROLLER = NodePath("CameraController/Camera3D")
 ANIMATIONPLAYER = NodePath("AnimationPlayer")
 CROUCH_SHAPECAST = NodePath("ShapeCast3D")
+WEAPON_CONTROLLER = NodePath("CameraController/Camera3D/WeaponRig/Weapon")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1611374559]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -495,7 +496,7 @@ enable_shadows = true
 [node name="WeaponRig" type="Node3D" parent="CameraController/Camera3D" unique_id=1949591967]
 
 [node name="Weapon" parent="CameraController/Camera3D/WeaponRig" unique_id=1289241358 instance=ExtResource("3_3og01")]
-transform = Transform3D(-1.9409964, -0.4813689, 0.028598556, 0, 0.11861267, 1.9964796, -0.48221782, 1.9375799, -0.115113355, -0.3635478, -0.18654716, -0.4426502)
+transform = Transform3D(0.9998552, -0.00016048922, -0.017015822, 0, 0.99995553, -0.009431344, 0.017016578, 0.009429979, 0.99981076, -0.039829098, -0.0032107597, 0)
 WEAPON_TYPE = ExtResource("4_fyafc")
 
 [node name="crowbar" parent="CameraController/Camera3D/WeaponRig" unique_id=1223158915 instance=ExtResource("3_5w0k0")]

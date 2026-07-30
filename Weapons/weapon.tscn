@@ -4,10 +4,16 @@
 [ext_resource type="Resource" uid="uid://3v7j1m1u4e3e" path="res://meshes/weapons/cowbar/crowbar.tres" id="2_2ue5o"]
 [ext_resource type="ArrayMesh" uid="uid://i4qhqejrwq6x" path="res://meshes/weapons/cowbar/mesh_crowbar.res" id="3_2ue5o"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2ue5o"]
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_g6cf3"]
+noise = SubResource("FastNoiseLite_2ue5o")
+
 [node name="Weapon" type="Node3D" unique_id=1289241358]
 transform = Transform3D(-1.1910489, 0.1462677, 0.0024289037, 0.005420411, 0.02022925, 0.9998477, 0.14619629, 1.1908807, -0.017282538, 0.20566835, -0.165, 0.06592035)
 script = ExtResource("1_0jw1c")
 WEAPON_TYPE = ExtResource("2_2ue5o")
+sway_noise = SubResource("NoiseTexture3D_g6cf3")
 
 [node name="WeaponMesh" type="MeshInstance3D" parent="." unique_id=1410205236]
 unique_name_in_owner = true

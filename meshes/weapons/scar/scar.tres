@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Weapons" format=3 uid="uid://dxm0iapn68xua"]
+
+[ext_resource type="Script" uid="uid://bb3tvihywn3dq" path="res://meshes/weapons/weapons.gd" id="1_3i3lw"]
+
+[resource]
+script = ExtResource("1_3i3lw")
+metadata/_custom_type_script = "uid://bb3tvihywn3dq"
