@@ -32,3 +32,6 @@ func update(delta):
 	
 	if PLAYER.velocity.y < -3.0 and !PLAYER.is_on_floor():
 		transition.emit("FallingPlayerState")
+	
+	if Input.is_action_just_pressed("attack"):
+		WEAPON._attack()
