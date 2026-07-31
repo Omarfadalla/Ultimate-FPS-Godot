@@ -25,6 +25,7 @@ global="*uid://cuy8gcm4j6ebx"
 
 [display]
 
+window/size/mode=3
 window/size/always_on_top=true
 window/vsync/vsync_mode=0
 

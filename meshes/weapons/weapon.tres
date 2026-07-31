@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Weapons" format=3 uid="uid://qrolvrmqeodw"]
+
+[ext_resource type="ArrayMesh" uid="uid://bor3hkx1t2b0l" path="res://meshes/weapons/blaster.res" id="1_t04tf"]
+[ext_resource type="Script" uid="uid://bb3tvihywn3dq" path="res://meshes/weapons/weapons.gd" id="2_jdjs6"]
+
+[resource]
+script = ExtResource("2_jdjs6")
+name = &"rifle"
+position = Vector3(0.506, -0.35, -0.6)
+mesh = ExtResource("1_t04tf")
+metadata/_custom_type_script = "uid://bb3tvihywn3dq"

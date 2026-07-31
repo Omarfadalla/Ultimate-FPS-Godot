@@ -6,6 +6,8 @@
 [resource]
 script = ExtResource("2_inqna")
 name = &"CrowbarL"
-position = Vector3(0.206, 0, 0)
+position = Vector3(0.506, -0.35, -0.6)
+rotation = Vector3(-90, -180, 0)
+scale = Vector3(3, 3, 3)
 mesh = ExtResource("1_whb8i")
 metadata/_custom_type_script = "uid://bb3tvihywn3dq"
