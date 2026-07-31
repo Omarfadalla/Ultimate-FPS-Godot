@@ -37,6 +37,54 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"meshes": {
+"Sketchfab_Scene_Cylinder_Material_001_0": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://meshes/weapons/scar/5..res",
+"save_to_file/path": "uid://bjgr3vnolskir"
+},
+"Sketchfab_Scene_Cylinder_Material_002_0": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://meshes/weapons/scar/3.res",
+"save_to_file/path": "uid://b3rvofq4wnfox"
+},
+"Sketchfab_Scene_Cylinder_Material_003_0": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://meshes/weapons/scar/2.res",
+"save_to_file/path": "uid://vnb14yg6qiwu"
+},
+"Sketchfab_Scene_Cylinder_Material_004_0": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://meshes/weapons/scar/1.res",
+"save_to_file/path": "uid://dxw33bhl1yw6g"
+},
+"Sketchfab_Scene_Cylinder_Material_005_0": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://meshes/weapons/scar/4.res",
+"save_to_file/path": "uid://b14f6011u8lpg"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1

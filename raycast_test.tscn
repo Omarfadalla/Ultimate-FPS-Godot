@@ -1,11 +1,7 @@
 [gd_scene format=3 uid="uid://b6hfpi51n1t0x"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pm03r"]
-albedo_color = Color(0, 0, 0, 1)
+[ext_resource type="Texture2D" uid="uid://fot40k3tlfct" path="res://textures/bullet_hole.png" id="1_3mfk3"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_3mfk3"]
-material = SubResource("StandardMaterial3D_pm03r")
-radius = 0.1
-
-[node name="MeshInstance3D" type="MeshInstance3D" unique_id=1736162952]
-mesh = SubResource("SphereMesh_3mfk3")
+[node name="Decal" type="Decal" unique_id=1365131968]
+size = Vector3(0.1, 0.1, 0.1)
+texture_albedo = ExtResource("1_3mfk3")

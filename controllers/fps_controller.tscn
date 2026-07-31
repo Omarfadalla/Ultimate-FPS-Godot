@@ -9,6 +9,7 @@
 [ext_resource type="Theme" uid="uid://jgwk3mj0x7cs" path="res://ui/themes/debug.tres" id="4_t6fw5"]
 [ext_resource type="Script" uid="uid://bwxph02lwoxl" path="res://scripts/debug.gd" id="4_y677r"]
 [ext_resource type="Script" uid="uid://fsfvk5kbktae" path="res://scripts/state_machine.gd" id="6_gshig"]
+[ext_resource type="PackedScene" uid="uid://c0c4p0sv30fq0" path="res://meshes/weapons/scar/ar.tscn" id="6_tg6sc"]
 [ext_resource type="Script" uid="uid://bfxp6r7ls7qnp" path="res://scripts/IdlePlayerState.gd" id="7_jmoha"]
 [ext_resource type="Script" uid="uid://b87u8fsxsovv5" path="res://scripts/WalkingPlayerState.gd" id="8_jmoha"]
 [ext_resource type="Script" uid="uid://saiuiv77oppo" path="res://scripts/SprintingPlayerState.gd" id="9_bneyr"]
@@ -496,11 +497,15 @@ enable_shadows = true
 [node name="WeaponRig" type="Node3D" parent="CameraController/Camera3D" unique_id=1949591967]
 
 [node name="Weapon" parent="CameraController/Camera3D/WeaponRig" unique_id=1289241358 instance=ExtResource("3_3og01")]
-transform = Transform3D(0.9998552, -0.00016048922, -0.017015822, 0, 0.99995553, -0.009431344, 0.017016578, 0.009429979, 0.99981076, -0.039829098, -0.0032107597, 0)
+transform = Transform3D(0.9998552, -0.00016048922, -0.017015822, 0, 0.99995553, -0.009431344, 0.017016578, 0.009429979, 0.99981076, -0.039829098, -0.003210783, 0.1845479)
 WEAPON_TYPE = ExtResource("4_fyafc")
 
 [node name="crowbar" parent="CameraController/Camera3D/WeaponRig" unique_id=1223158915 instance=ExtResource("3_5w0k0")]
 transform = Transform3D(-0.9924585, 0.10093929, 0.06955088, 0.09556327, 0.9924625, -0.07671903, -0.07677061, -0.06949395, -0.99462396, 0.215, -0.31500006, -0.33)
+visible = false
+
+[node name="ar" parent="CameraController/Camera3D/WeaponRig" unique_id=2052120538 instance=ExtResource("6_tg6sc")]
+transform = Transform3D(-4.371139e-11, 0, 0.001, 0, 0.001, 0, -0.001, 0, -4.371139e-11, 0.23, -0.15, -0.45)
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1536981195]

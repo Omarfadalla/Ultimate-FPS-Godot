@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c0c4p0sv30fq0"]
+
+[ext_resource type="PackedScene" uid="uid://dsxboj7ns6e8m" path="res://meshes/weapons/scar/low-poly_ar-10.glb" id="1_8fcd3"]
+
+[node name="ar" type="Node3D" unique_id=2052120538]
+
+[node name="Sketchfab_Scene" parent="." unique_id=2120336517 instance=ExtResource("1_8fcd3")]
