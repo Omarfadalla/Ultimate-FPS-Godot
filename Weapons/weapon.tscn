@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://b2d4bgqwgu8rk"]
 
 [ext_resource type="Script" uid="uid://carxlmbrmlg1n" path="res://Weapons/init_weapon.gd" id="1_0jw1c"]
-[ext_resource type="Resource" uid="uid://3v7j1m1u4e3e" path="res://meshes/weapons/cowbar/crowbar.tres" id="2_2ue5o"]
+[ext_resource type="Resource" uid="uid://qrolvrmqeodw" path="res://meshes/weapons/weapon.tres" id="2_iakxr"]
 [ext_resource type="ArrayMesh" uid="uid://i4qhqejrwq6x" path="res://meshes/weapons/cowbar/mesh_crowbar.res" id="3_2ue5o"]
+[ext_resource type="Script" uid="uid://bacevfdwugaay" path="res://scripts/weapon_recoil_physical.gd" id="3_g6cf3"]
+[ext_resource type="ArrayMesh" uid="uid://bor3hkx1t2b0l" path="res://meshes/weapons/blaster.res" id="4_qm7ci"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_2ue5o"]
 
@@ -10,18 +12,30 @@
 noise = SubResource("FastNoiseLite_2ue5o")
 
 [node name="Weapon" type="Node3D" unique_id=1289241358]
-transform = Transform3D(-1.1910489, 0.1462677, 0.0024289037, 0.005420411, 0.02022925, 0.9998477, 0.14619629, 1.1908807, -0.017282538, 0.20566835, -0.165, 0.06592035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.506, -0.35, -0.6)
 script = ExtResource("1_0jw1c")
-WEAPON_TYPE = ExtResource("2_2ue5o")
+WEAPON_TYPE = ExtResource("2_iakxr")
 sway_noise = SubResource("NoiseTexture3D_g6cf3")
 
-[node name="WeaponMesh" type="MeshInstance3D" parent="." unique_id=1410205236]
-unique_name_in_owner = true
-transform = Transform3D(0.9999986, -2.9802322e-08, 1.1641532e-10, -1.0430813e-07, 0.9999975, 9.313226e-10, 1.8626451e-09, 1.3038516e-08, 0.99999833, 0, 0, 0)
-cast_shadow = 0
-mesh = ExtResource("3_2ue5o")
+[node name="RecoilPosition" type="Node3D" parent="." unique_id=17616632 node_paths=PackedStringArray("weapon")]
+transform = Transform3D(0.99999994, -7.450581e-09, 1.1641532e-10, -1.4901161e-08, 0.9999998, 1.8626451e-09, 2.3283064e-10, 1.8626451e-09, 0.9999999, 0, 0, 0)
+script = ExtResource("3_g6cf3")
+recoil_amount = Vector3(0.01, 0.01, 0.05)
+snap_amount = 17.0
+speed = 6.0
+weapon = NodePath("..")
 
-[node name="WeaponShadow" type="MeshInstance3D" parent="." unique_id=186585899]
+[node name="WeaponMesh" type="MeshInstance3D" parent="RecoilPosition" unique_id=1410205236]
 unique_name_in_owner = true
+transform = Transform3D(0.9999986, -7.450581e-09, 0, -9.685755e-08, 0.9999976, 1.8626451e-09, 1.3969839e-09, 1.1175871e-08, 0.9999984, 0, 0, 0)
+cast_shadow = 0
+mesh = ExtResource("4_qm7ci")
+skeleton = NodePath("../..")
+
+[node name="WeaponShadow" type="MeshInstance3D" parent="RecoilPosition" unique_id=186585899]
+unique_name_in_owner = true
+transform = Transform3D(1, 1.4901161e-08, 0, -1.4901161e-08, 1.0000001, 9.313226e-10, 0, -3.7252903e-09, 1.0000001, 0, 0, 0)
+visible = false
 cast_shadow = 3
 mesh = ExtResource("3_2ue5o")
+skeleton = NodePath("../..")
