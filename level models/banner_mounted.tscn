@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://befmry4si2sgu"]
+
+[ext_resource type="PackedScene" uid="uid://bsjg5ef4qampj" path="res://3d assets/dungeon_assets/props/banner_mounted.glb" id="1_8m2w2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l4rg5"]
+size = Vector3(2.1200466, 2.6550312, 1.0118408)
+
+[node name="banner_mounted" type="StaticBody3D" unique_id=5619314]
+
+[node name="banner_mounted" parent="." unique_id=207716921 instance=ExtResource("1_8m2w2")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=481810314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03139019, 2.4083452, 0.30321777)
+shape = SubResource("BoxShape3D_l4rg5")

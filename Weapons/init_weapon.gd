@@ -18,6 +18,8 @@ signal weapon_fired
 		if Engine.is_editor_hint():
 			load_weapon()
 
+@export var attack_damage: int = 20  # damage dealt per hit; tweak per weapon
+
 
 @onready var Weapon_mesh : MeshInstance3D = %WeaponMesh
 @onready var Weapon_shadow : MeshInstance3D = %WeaponShadow
@@ -123,6 +125,9 @@ func _attack():
 	var result = space_state.intersect_ray(query)
 	if result:
 		_bullet_hole(result.get("position"),result.get("normal"))
+		var hit_collider = result.get("collider")
+		if hit_collider and hit_collider.has_method("take_damage"):
+			hit_collider.take_damage(attack_damage)
 	
 func _bullet_hole(position:Vector3 , normal: Vector3) -> void:
 	var instance = raycast_test.instantiate()
@@ -136,4 +141,3 @@ func _bullet_hole(position:Vector3 , normal: Vector3) -> void:
 	fade.tween_property(instance,"modulate:a",0,0.2)
 	await get_tree().create_timer(0.2).timeout
 	instance.queue_free()
-	
