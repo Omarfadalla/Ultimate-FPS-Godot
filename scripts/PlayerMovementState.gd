@@ -11,6 +11,8 @@ func _ready() -> void:
 	PLAYER = owner as Player
 	ANIMATION = PLAYER.ANIMATIONPLAYER
 	WEAPON = PLAYER.WEAPON_CONTROLLER
+	
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

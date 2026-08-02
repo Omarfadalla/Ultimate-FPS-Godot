@@ -3,6 +3,9 @@ class_name WeaponController
 extends Node3D
 
 signal weapon_fired
+signal ammo_changed(current_ammo: int, magazine_size: int)
+signal reload_started
+signal reload_finished
 
 @export var WEAPON_TYPE: Weapons:
 	set(value):
@@ -18,7 +21,14 @@ signal weapon_fired
 		if Engine.is_editor_hint():
 			load_weapon()
 
-@export var attack_damage: int = 20  # damage dealt per hit; tweak per weapon
+@export_group("Combat")
+@export var attack_damage: int = 20
+@export var magazine_size: int = 12
+@export var reload_time: float = 1.2
+
+@export_group("Visuals")
+@export var bullet_hole_texture: Texture2D  # drag your decal texture in here
+@export var damage_number_font: FontFile    # drag your font in here
 
 
 @onready var Weapon_mesh : MeshInstance3D = %WeaponMesh
@@ -33,11 +43,17 @@ var idle_sway_adjustment
 var idle_sway_rotation_strength
 var weapon_bob_amount : Vector2 = Vector2(0,0)
 
+var current_ammo: int
+var is_reloading: bool = false
+
 var raycast_test = preload("res://raycast_test.tscn")
 
 func _ready() -> void:
 	await  owner.ready
 	load_weapon()
+
+	current_ammo = magazine_size
+	ammo_changed.emit(current_ammo, magazine_size)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("weapon1"):
@@ -48,6 +64,13 @@ func _input(event: InputEvent) -> void:
 		load_weapon()
 	if event is InputEventMouseMotion:
 		mouse_movement = event.relative
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			_attack()
+	# Requires a "reload" input action bound to a key (e.g. R) in
+	# Project Settings > Input Map.
+	if event.is_action_pressed("reload"):
+		_reload()
 
 func load_weapon():
 	Weapon_mesh.mesh = WEAPON_TYPE.mesh
@@ -114,7 +137,16 @@ func get_sway_noise() -> float:
 	return noise_location
 
 func _attack():
+	if is_reloading:
+		return
+	if current_ammo <= 0:
+		_reload()  # optional: auto-reload on empty, remove if you don't want this
+		return
+
 	weapon_fired.emit()
+	current_ammo -= 1
+	ammo_changed.emit(current_ammo, magazine_size)
+
 	var camera = global.player.CAMERA_CONTROLLER
 	var space_state = camera.get_world_3d().direct_space_state
 	var screen_center = get_viewport().size / 2
@@ -128,16 +160,84 @@ func _attack():
 		var hit_collider = result.get("collider")
 		if hit_collider and hit_collider.has_method("take_damage"):
 			hit_collider.take_damage(attack_damage)
-	
-func _bullet_hole(position:Vector3 , normal: Vector3) -> void:
-	var instance = raycast_test.instantiate()
-	get_tree().root.add_child(instance)
-	instance.global_position = position
-	instance.look_at(instance.global_transform.origin + normal,Vector3.UP)
-	if normal !=Vector3.UP and normal != Vector3.DOWN:
-		instance.rotate_object_local(Vector3(1,0,0),90)
+			_spawn_damage_number(attack_damage, result.get("position"))
+
+## Reload "animation": a full 360-degree spin around the weapon's local
+## Y axis over reload_time seconds, since no dedicated reload animation
+## is available. Swap this out for anim.play("reload") later if you add
+## a proper reload animation to your AnimationPlayer.
+func _reload() -> void:
+	if is_reloading or current_ammo == magazine_size:
+		return
+
+	is_reloading = true
+	reload_started.emit()
+
+	var start_rotation_y := rotation.y
+	var tween := create_tween()
+	tween.tween_property(self, "rotation:y", start_rotation_y + TAU, reload_time)
+
+	await get_tree().create_timer(reload_time).timeout
+
+	rotation.y = start_rotation_y  # snap back cleanly in case of float drift
+	current_ammo = magazine_size
+	ammo_changed.emit(current_ammo, magazine_size)
+	is_reloading = false
+	reload_finished.emit()
+
+## Bullet hole built directly in code as a small quad mesh instead of a
+## Decal node, so it renders reliably on any surface (including the
+## zombie) regardless of your project's rendering method.
+func _bullet_hole(position: Vector3, normal: Vector3) -> void:
+	var mesh_instance := MeshInstance3D.new()
+	var quad := QuadMesh.new()
+	quad.size = Vector2(0.25, 0.25)
+	mesh_instance.mesh = quad
+
+	var mat := StandardMaterial3D.new()
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	if bullet_hole_texture:
+		mat.albedo_texture = bullet_hole_texture
+		mat.albedo_color = Color(1, 1, 1, 1)
+	else:
+		mat.albedo_color = Color(0.05, 0.05, 0.05, 0.9)
+	mesh_instance.material_override = mat
+
+	get_tree().root.add_child(mesh_instance)
+	mesh_instance.global_position = position + normal * 0.02  # avoid z-fighting
+
+	var up_reference := Vector3.UP
+	if abs(normal.dot(up_reference)) > 0.99:
+		up_reference = Vector3.RIGHT
+	mesh_instance.look_at(mesh_instance.global_position + normal, up_reference)
+
 	await get_tree().create_timer(1).timeout
 	var fade = get_tree().create_tween()
-	fade.tween_property(instance,"modulate:a",0,0.2)
+	fade.tween_property(mesh_instance,"modulate:a",0,0.2)
 	await get_tree().create_timer(0.2).timeout
-	instance.queue_free()
+	mesh_instance.queue_free()
+
+## Floating damage number that pops up where the shot landed and drifts
+## upward while fading out. Uses damage_number_font if you assign one.
+func _spawn_damage_number(amount: int, at_position: Vector3) -> void:
+	var label := Label3D.new()
+	label.text = str(amount)
+	label.modulate = Color(1.0, 0.15, 0.15)
+	label.font_size = 56
+	label.outline_size = 10
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	label.pixel_size = 0.01
+	if damage_number_font:
+		label.font = damage_number_font
+
+	get_tree().root.add_child(label)
+	label.global_position = at_position + Vector3(0, 0.25, 0)
+
+	var tween := get_tree().create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position:y", label.global_position.y + 1.0, 0.7)
+	tween.tween_property(label, "modulate:a", 0.0, 0.7)
+	tween.finished.connect(label.queue_free)

@@ -5,13 +5,19 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jt4ir"]
 radius = 0.5444336
-height = 2.8336182
+height = 2.651184
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bicdv"]
+size = Vector3(2.3126678, 2.4653168, 2.347168)
 
 [node name="mage" type="CharacterBody3D" unique_id=1865979781]
 script = ExtResource("1_bicdv")
+detection_radius = 100.0
+lose_interest_radius = 30.0
+animation_player_path = NodePath("skeleton_mage/AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1871938933]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.077543974, 1.3139038, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.077543974, 1.4051208, 0)
 shape = SubResource("CapsuleShape3D_jt4ir")
 
 [node name="skeleton_mage" parent="." unique_id=697733382 instance=ExtResource("1_mr4bc")]
@@ -104,6 +110,12 @@ bones/40/scale = Vector3(1, 1.0000001, 1)
 [node name="head" parent="skeleton_mage/Rig/Skeleton3D" index="0" unique_id=1810831559]
 transform = Transform3D(0.99972045, -1.4014349e-09, 0.023646593, 1.3934147e-09, 0.9999998, 3.5568637e-10, -0.023646593, -3.2263736e-10, 0.99972045, -4.3038546e-09, 1.2278259, 1.5739471e-15)
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2027801087]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1460031567]
+
+[node name="AttackArea" type="Area3D" parent="." unique_id=141517309]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea" unique_id=1804151192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.019065857, 1.7264605, 0.5903137)
+shape = SubResource("BoxShape3D_bicdv")
 
 [editable path="skeleton_mage"]

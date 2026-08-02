@@ -14,7 +14,7 @@ extends CharacterBody3D
 ## Your player scene must be in the "player" group, and must have a
 ## method called take_damage(amount: int) on it (see player_health.gd).
 
-enum State { IDLE, CHASE, ATTACK, DEAD }
+enum ZombieState { IDLE, CHASE, ATTACK, DEAD }
 
 @export_group("Stats")
 @export var max_health: int = 100
@@ -31,7 +31,7 @@ enum State { IDLE, CHASE, ATTACK, DEAD }
 @export var attack_area_path: NodePath = "AttackArea"
 
 var health: int
-var state: State = State.IDLE
+var state: ZombieState = ZombieState.IDLE
 var player: Node3D = null
 var can_attack: bool = true
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -42,6 +42,8 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _ready() -> void:
+	set_physics_process(false)
+
 	health = max_health
 	nav_agent.path_desired_distance = 0.5
 	nav_agent.target_desired_distance = attack_range * 0.8
@@ -51,22 +53,52 @@ func _ready() -> void:
 	if players.size() > 0:
 		player = players[0]
 
-	_play_anim("idle")
+	_configure_animation_loops()
+	_play_anim("Idle")
+
+	# Give the navigation map and physics a couple frames to settle before
+	# this zombie starts moving. Spawning several at once in the same spot
+	# (or before the nav mesh has synced) is what causes the visible
+	# snap/jitter glitch right at the start of the scene.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	set_physics_process(true)
+
+
+## Imported animations (FBX/glTF/Mixamo, etc.) usually come in with
+## loop_mode = LOOP_NONE regardless of what the source file intended.
+## Rather than re-exporting or editing the .import file, force the
+## correct loop behavior here in code once at startup.
+func _configure_animation_loops() -> void:
+	_set_anim_loop("Idle", Animation.LOOP_LINEAR)
+	_set_anim_loop("Running_A", Animation.LOOP_LINEAR)
+	_set_anim_loop("1H_Melee_Attack_Stab", Animation.LOOP_NONE)
+	_set_anim_loop("Death_A", Animation.LOOP_NONE)
+	_set_anim_loop("Hit_A", Animation.LOOP_NONE)
+
+
+func _set_anim_loop(anim_name: String, loop_mode: int) -> void:
+	if not anim.has_animation(anim_name):
+		push_warning("Zombie: animation '%s' not found on AnimationPlayer." % anim_name)
+		return
+
+	var animation_resource: Animation = anim.get_animation(anim_name)
+	animation_resource.loop_mode = loop_mode
 
 
 func _physics_process(delta: float) -> void:
-	if state == State.DEAD:
+	if state == ZombieState.DEAD:
 		return
 
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	match state:
-		State.IDLE:
+		ZombieState.IDLE:
 			_process_idle()
-		State.CHASE:
+		ZombieState.CHASE:
 			_process_chase(delta)
-		State.ATTACK:
+		ZombieState.ATTACK:
 			_process_attack()
 
 	move_and_slide()
@@ -80,24 +112,24 @@ func _process_idle() -> void:
 		return
 
 	if global_position.distance_to(player.global_position) <= detection_radius:
-		_change_state(State.CHASE)
+		_change_state(ZombieState.CHASE)
 
 
 func _process_chase(delta: float) -> void:
 	if player == null:
-		_change_state(State.IDLE)
+		_change_state(ZombieState.IDLE)
 		return
 
 	var dist := global_position.distance_to(player.global_position)
 
 	# Player wandered too far away, give up and go back to idle.
 	if dist > lose_interest_radius:
-		_change_state(State.IDLE)
+		_change_state(ZombieState.IDLE)
 		return
 
 	# Close enough to attack.
 	if dist <= attack_range:
-		_change_state(State.ATTACK)
+		_change_state(ZombieState.ATTACK)
 		return
 
 	nav_agent.target_position = player.global_position
@@ -119,7 +151,7 @@ func _process_attack() -> void:
 	velocity.z = 0
 
 	if player == null:
-		_change_state(State.IDLE)
+		_change_state(ZombieState.IDLE)
 		return
 
 	var dist := global_position.distance_to(player.global_position)
@@ -127,7 +159,7 @@ func _process_attack() -> void:
 
 	# Player stepped out of range mid-attack-state; go back to chasing.
 	if dist > attack_range * 1.3:
-		_change_state(State.CHASE)
+		_change_state(ZombieState.CHASE)
 		return
 
 	if can_attack:
@@ -136,13 +168,13 @@ func _process_attack() -> void:
 
 func _perform_attack() -> void:
 	can_attack = false
-	_play_anim("attack")
+	_play_anim("1H_Melee_Attack_Stab")
 
 	# Wait roughly until the "hit" moment in your animation before dealing damage.
 	# Adjust this delay to match the frame where the zombie's swing connects.
 	await get_tree().create_timer(0.4).timeout
 
-	if state == State.DEAD:
+	if state == ZombieState.DEAD:
 		return
 
 	# Only actually damage the player if they're still within the AttackArea.
@@ -155,7 +187,7 @@ func _perform_attack() -> void:
 
 
 func take_damage(amount: int) -> void:
-	if state == State.DEAD:
+	if state == ZombieState.DEAD:
 		return
 
 	health -= amount
@@ -164,15 +196,38 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		_die()
 	else:
+		_play_hit_reaction()
 		# Optional: interrupt current action, aggro the player if not already.
-		if player != null and state == State.IDLE:
-			_change_state(State.CHASE)
+		if player != null and state == ZombieState.IDLE:
+			_change_state(ZombieState.CHASE)
+
+
+## Plays a brief flinch/hit animation on damage (if one exists named "hit"),
+## then resumes whatever animation matches the zombie's current state.
+## Safe to skip entirely if you don't have a "hit" animation exported.
+func _play_hit_reaction() -> void:
+	if not anim.has_animation("Hit_A"):
+		return
+
+	anim.play("Hit_A")
+	await anim.animation_finished
+
+	if state == ZombieState.DEAD:
+		return
+
+	match state:
+		ZombieState.IDLE:
+			_play_anim("Idle")
+		ZombieState.CHASE:
+			_play_anim("Running_A")
+		ZombieState.ATTACK:
+			pass  # next attack cycle will replay "attack" on its own
 
 
 func _die() -> void:
-	_change_state(State.DEAD)
+	_change_state(ZombieState.DEAD)
 	velocity = Vector3.ZERO
-	_play_anim("death")
+	_play_anim("Death_A")
 	set_physics_process(false)
 
 	# Disable collisions so the corpse doesn't keep blocking navigation/attacks.
@@ -184,19 +239,19 @@ func _die() -> void:
 	queue_free()
 
 
-func _change_state(new_state: State) -> void:
+func _change_state(new_state: ZombieState) -> void:
 	if state == new_state:
 		return
 	state = new_state
 
 	match state:
-		State.IDLE:
-			_play_anim("idle")
-		State.CHASE:
-			_play_anim("walk")
-		State.ATTACK:
+		ZombieState.IDLE:
+			_play_anim("Idle")
+		ZombieState.CHASE:
+			_play_anim("Running_A")
+		ZombieState.ATTACK:
 			pass # handled by _perform_attack()
-		State.DEAD:
+		ZombieState.DEAD:
 			pass # handled by _die()
 
 

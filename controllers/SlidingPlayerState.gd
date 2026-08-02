@@ -8,6 +8,9 @@ extends PlayerMovementState
 
 @onready var CROUCH_SHAPECAST : ShapeCast3D = %ShapeCast3D
 
+func _ready() -> void:
+	if Input.is_action_just_pressed("attack"):
+		WEAPON._attack()
 
 func enter(previous_state) -> void:
 	set_tilt(PLAYER._current_rotation)
