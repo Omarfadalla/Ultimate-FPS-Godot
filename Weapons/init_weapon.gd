@@ -162,10 +162,10 @@ func _attack():
 			hit_collider.take_damage(attack_damage)
 			_spawn_damage_number(attack_damage, result.get("position"))
 
-## Reload "animation": a full 360-degree spin around the weapon's local
-## Y axis over reload_time seconds, since no dedicated reload animation
-## is available. Swap this out for anim.play("reload") later if you add
-## a proper reload animation to your AnimationPlayer.
+## Reload "animation": the weapon tilts upward (rotates on its local X
+## axis) and wobbles gently left-right (small Z rotation) while reloading,
+## then settles back to its original rotation. Swap this out for
+## anim.play("reload") later if you add a proper reload animation.
 func _reload() -> void:
 	if is_reloading or current_ammo == magazine_size:
 		return
@@ -173,13 +173,27 @@ func _reload() -> void:
 	is_reloading = true
 	reload_started.emit()
 
-	var start_rotation_y := rotation.y
-	var tween := create_tween()
-	tween.tween_property(self, "rotation:y", start_rotation_y + TAU, reload_time)
+	var start_rotation := rotation
+	var lift_time := reload_time * 0.35
+	var settle_time := reload_time - lift_time
+
+	# Upward tilt, then back down.
+	var lift_tween := create_tween()
+	lift_tween.tween_property(self, "rotation:x", start_rotation.x - deg_to_rad(25), lift_time)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	lift_tween.tween_property(self, "rotation:x", start_rotation.x, settle_time)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+	# Small left-right wobble (in degrees, very subtle) while reloading.
+	var wobble_tween := create_tween()
+	wobble_tween.tween_property(self, "rotation:z", start_rotation.z + deg_to_rad(3), reload_time * 0.2)
+	wobble_tween.tween_property(self, "rotation:z", start_rotation.z - deg_to_rad(3), reload_time * 0.2)
+	wobble_tween.tween_property(self, "rotation:z", start_rotation.z + deg_to_rad(1.5), reload_time * 0.2)
+	wobble_tween.tween_property(self, "rotation:z", start_rotation.z, reload_time * 0.4)
 
 	await get_tree().create_timer(reload_time).timeout
 
-	rotation.y = start_rotation_y  # snap back cleanly in case of float drift
+	rotation = start_rotation  # snap back cleanly in case of float drift
 	current_ammo = magazine_size
 	ammo_changed.emit(current_ammo, magazine_size)
 	is_reloading = false

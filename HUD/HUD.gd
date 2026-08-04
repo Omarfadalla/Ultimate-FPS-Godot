@@ -92,3 +92,5 @@ func _on_player_died() -> void:
 	death_label.visible = true
 	var tween := create_tween()
 	tween.tween_property(death_label, "modulate:a", 1.0, 0.6)
+	await get_tree().create_timer(2).timeout
+	get_tree().quit()

@@ -1,5 +1,6 @@
 class_name CrouchingPlayerState
 extends PlayerMovementState
+
 @export var SPEED : float = 3.0
 @export var ACCELERATION : float = 0.1
 @export var DECELERATION : float = 0.25
@@ -8,6 +9,7 @@ extends PlayerMovementState
 @export var WEAPON_BOB_V : float = 0.7
 @export_range(1,6,0.1) var CROUCH_SPEED: float = 4.0
 @onready var CROUCH_SHAPECAST : ShapeCast3D = %ShapeCast3D
+
 var RELEASED : bool = false
 
 func enter(previous_state) -> void:
@@ -21,18 +23,25 @@ func enter(previous_state) -> void:
 func exit() -> void:
 	RELEASED = false
 
-
 func update(delta: float) -> void:
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED,ACCELERATION,DECELERATION)
 	PLAYER.update_velocity()
-	
+
 	WEAPON.sway_weapon(delta,false)
 	WEAPON._weapon_bob(delta,WEAPON_BOB_SPD,WEAPON_BOB_H,WEAPON_BOB_V)
-	
+
+	# BUG FIX: previously only the elif branch set RELEASED = true, so a
+	# just_released event would leave RELEASED = false, causing the elif
+	# to also fire on the very next frame and call uncrouch() a second
+	# time — two overlapping uncrouch sequences racing each other.
+	if RELEASED:
+		return
+
 	if Input.is_action_just_released("crouch"):
+		RELEASED = true
 		uncrouch()
-	elif Input.is_action_pressed("crouch") == false and RELEASED == false:
+	elif Input.is_action_pressed("crouch") == false:
 		RELEASED = true
 		uncrouch()
 
@@ -40,7 +49,10 @@ func uncrouch():
 	if CROUCH_SHAPECAST.is_colliding() == false:
 		ANIMATION.play("Crouching", -1.0, -CROUCH_SPEED, true)
 		await ANIMATION.animation_finished
-		if PLAYER.velocity.length() == 0:
+		# BUG FIX: exact float equality (== 0) on velocity almost never
+		# actually triggers due to floating point residuals — use a small
+		# threshold instead so standing still reliably goes to Idle.
+		if PLAYER.velocity.length() < 0.1:
 			transition.emit("IdlePlayerState")
 		else:
 			transition.emit("WalkingPlayerState")
