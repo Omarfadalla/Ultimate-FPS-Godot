@@ -12,6 +12,7 @@ size = Vector3(2.3126678, 2.4653168, 2.347168)
 
 [node name="mage" type="CharacterBody3D" unique_id=1865979781]
 script = ExtResource("1_bicdv")
+attack_cooldown = 0.3
 detection_radius = 100.0
 lose_interest_radius = 30.0
 animation_player_path = NodePath("skeleton_mage/AnimationPlayer")

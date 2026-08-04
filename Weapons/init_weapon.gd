@@ -215,7 +215,7 @@ func _bullet_hole(position: Vector3, normal: Vector3) -> void:
 
 	await get_tree().create_timer(1).timeout
 	var fade = get_tree().create_tween()
-	fade.tween_property(mesh_instance,"modulate:a",0,0.2)
+	fade.tween_property(mat, "albedo_color:a", 0.0, 0.2)
 	await get_tree().create_timer(0.2).timeout
 	mesh_instance.queue_free()
 
